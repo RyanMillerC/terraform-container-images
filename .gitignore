@@ -1,0 +1,4 @@
+# Ignore bundle files
+*.tar
+*.tar.gz
+*.64
