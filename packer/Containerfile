@@ -1,0 +1,27 @@
+# This image is based on Alpine Linux
+FROM docker.io/hashicorp/packer:light-1.11.0
+
+# * Install extra system packages
+# * Install Ansible collections
+# * Install Packer plugins
+RUN apk --no-cache add ansible \
+                       openssh \
+                       py3-jmespath \
+                       py3-jmespath-pyc && \
+    ansible-galaxy collection install ansible.posix community.general && \
+    packer plugins install github.com/ethanmdavidson/git && \
+    packer plugins install github.com/hashicorp/amazon && \
+    packer plugins install github.com/hashicorp/ansible && \
+    packer plugins install github.com/hashicorp/azure && \
+    packer plugins install github.com/hashicorp/googlecompute && \
+    packer plugins install github.com/hashicorp/vsphere && \
+    packer plugins install github.com/joomcode/external && \
+    packer plugins install github.com/rgl/windows-update
+
+# Hashicorp sets the entrypoint to always run packer. This is hard to debug.
+# Set the entrypoint to blank so we can pass any command.
+ENTRYPOINT []
+
+# Drop into a bash shell, if the running container was not provided a command
+# to run.
+CMD ["/bin/bash"]
