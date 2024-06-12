@@ -1,0 +1,30 @@
+# This image is based on Ubuntu
+FROM docker.io/hashicorp/tfc-agent:1.15.2
+
+# Need root to install packages
+USER root
+
+# * Install extra system packages
+# * Install required Ansible collections
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get install -y ansible \
+                       ca-certificates \
+                       openssh-client \
+                       python3-jmespath && \
+    rm -rf /var/lib/apt/lists/* && \
+    ansible-galaxy collection install ansible.posix \
+                                      ansible.windows \
+                                      community.general \
+                                      community.windows \
+                                      microsoft.ad
+
+# Switch back to tfc-agent user
+USER tfc-agent
+
+# Hashicorp sets the entrypoint to always run packer. This is hard to debug.
+# Set the entrypoint to blank so we can pass any command.
+ENTRYPOINT []
+
+# Drop into a bash shell, if the running container was not provided a command
+# to run.
+CMD ["/bin/bash"]
