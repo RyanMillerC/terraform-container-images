@@ -1,5 +1,5 @@
 IMG := localhost/packer
-TAG := light-1.11.0-custom
+TAG := light-1.11.0-custom-2
 FILE_NAME := packer_${TAG}
 
 .PHONY: build
