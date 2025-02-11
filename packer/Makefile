@@ -1,10 +1,10 @@
 IMG := localhost/packer
-TAG := light-1.11.0-custom-2
+TAG := light-1.12.0-custom
 FILE_NAME := packer_${TAG}
 
 .PHONY: build
 build:
-	podman build -t "${IMG}:${TAG}" .
+	podman build --platform linux/amd64 --tag "${IMG}:${TAG}" .
 
 .PHONY: bundle
 bundle:
